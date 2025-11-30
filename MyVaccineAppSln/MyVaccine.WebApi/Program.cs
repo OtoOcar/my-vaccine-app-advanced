@@ -1,33 +1,37 @@
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using MyVaccine.WebApi.Models;
+using MyVaccine.WebApi.Configurations;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+// Add services to the container.
 
-// Registrar todos los validadores del ensamblado
+builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 
-builder.Services.AddDbContext<MyVaccineAppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("default"),
-        sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,                      // número de reintentos
-                maxRetryDelay: TimeSpan.FromSeconds(10), // tiempo máximo entre reintentos
-                errorNumbersToAdd: null                 // puedes especificar errores adicionales si quieres
-            );
-        }));
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.SetDatabaseConfiguration();
+builder.Services.SetMyVaccineAuthConfiguration();
+//builder.Services.SetDependencyInjection();
+//builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 app.Run();

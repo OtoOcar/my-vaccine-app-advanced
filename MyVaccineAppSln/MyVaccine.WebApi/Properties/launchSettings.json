@@ -1,22 +1,28 @@
-﻿{
+{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:8980",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5216",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MY_VACCINE_CONECTION_STRING": "Server=localhost,1433;Database=MyVaccineApp_DB;User Id=sa;Password=Abc.123456;TrustServerCertificate=true;",
+        "JWT_KEY": "f7a9c3d2e4b1-9c8f-4a7d-8e2b-1d9f6a2c5b7e-3d4f-9a8b-7c6d-2e1f9b4a5c7d"
       }
     },
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:8981;http://localhost:8980",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7093;http://localhost:5216",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MY_VACCINE_CONECTION_STRING": "Server=localhost,1433;Database=MyVaccineApp_DB;User Id=sa;Password=Abc.123456;TrustServerCertificate=true;",
+        "JWT_KEY": "f7a9c3d2e4b1-9c8f-4a7d-8e2b-1d9f6a2c5b7e-3d4f-9a8b-7c6d-2e1f9b4a5c7d"
       }
     }
   }

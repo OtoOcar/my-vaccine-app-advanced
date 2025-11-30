@@ -1,32 +1,31 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyVaccine.WebApi.Models;
 
-public class MyVaccineAppDbContext : DbContext
+public class MyVaccineAppDbContext : IdentityDbContext<IdentityUser>
 {
     public MyVaccineAppDbContext(DbContextOptions<MyVaccineAppDbContext> options) : base(options)
     {
-    }
 
-    // Evitamos conflicto con IdentityDbContext.Users
-    public DbSet<User> AppUsers { get; set; } = default!;
-    public DbSet<Dependent> Dependents { get; set; } = default!;
-    public DbSet<VaccineCategory> VaccineCategories { get; set; } = default!;
-    public DbSet<Vaccine> Vaccines { get; set; } = default!;
-    public DbSet<VaccineRecord> VaccineRecords { get; set; } = default!;
-    public DbSet<Allergy> Allergies { get; set; } = default!;
-    public DbSet<FamilyGroup> FamilyGroups { get; set; } = default!;
+    }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Dependent> Dependents { get; set; }
+    public DbSet<VaccineCategory> VaccineCategories { get; set; }
+    public DbSet<Vaccine> Vaccines { get; set; }
+    public DbSet<VaccineRecord> VaccineRecords { get; set; }
+    public DbSet<Allergy> Allergies { get; set; }
+    public DbSet<FamilyGroup> FamilyGroups { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // User ↔ IdentityUser
         modelBuilder.Entity<User>()
-            .HasOne(u => u.AspNetUser)
-            .WithMany()
-            .HasForeignKey(u => u.AspNetUserId);
+                 .HasOne(u => u.AspNetUser)
+                 .WithMany()
+                 .HasForeignKey(u => u.AspNetUserId);
 
         modelBuilder.Entity<User>(entity =>
         {
@@ -80,8 +79,7 @@ public class MyVaccineAppDbContext : DbContext
             entity.HasOne(vr => vr.User)
                 .WithMany(u => u.VaccineRecords)
                 .HasForeignKey(vr => vr.UserId)
-                .OnDelete(DeleteBehavior.Restrict); // más claro que NoAction
-
+                .OnDelete(DeleteBehavior.NoAction);
             entity.HasOne(vr => vr.Dependent)
                 .WithMany(d => d.VaccineRecords)
                 .HasForeignKey(vr => vr.DependentId)
