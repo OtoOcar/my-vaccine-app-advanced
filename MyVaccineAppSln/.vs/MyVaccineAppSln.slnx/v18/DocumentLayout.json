@@ -1,12 +1,155 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|c:\\users\\oscar\\downloads\\projects\\dotnet\\myvaccineapp\\myvaccineappsln\\myvaccine.webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|solutionrelative:myvaccine.webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|c:\\users\\oscar\\downloads\\projects\\dotnet\\myvaccineapp\\myvaccineappsln\\myvaccine.webapi\\models\\myvaccineappdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|solutionrelative:myvaccine.webapi\\models\\myvaccineappdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|c:\\users\\oscar\\downloads\\projects\\dotnet\\myvaccineapp\\myvaccineappsln\\myvaccine.webapi\\models\\myvaccineappdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|solutionrelative:myvaccine.webapi\\models\\myvaccineappdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|c:\\users\\oscar\\downloads\\projects\\dotnet\\myvaccineapp\\myvaccineappsln\\myvaccine.webapi\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|solutionrelative:myvaccine.webapi\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|c:\\users\\oscar\\downloads\\projects\\dotnet\\myvaccineapp\\myvaccineappsln\\myvaccine.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|solutionrelative:myvaccine.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|c:\\users\\oscar\\downloads\\projects\\dotnet\\myvaccineapp\\myvaccineappsln\\myvaccine.webapi\\myvaccine.webapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|solutionrelative:myvaccine.webapi\\myvaccine.webapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|c:\\users\\oscar\\downloads\\projects\\dotnet\\myvaccineapp\\myvaccineappsln\\myvaccine.webapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{28B1B2E8-EBA0-8579-3502-B7C0E73355CF}|MyVaccine.WebApi\\MyVaccine.WebApi.csproj|solutionrelative:myvaccine.webapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Oscar\\.nuget\\packages\\fluentvalidation\\11.9.0\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MyVaccineAppDbContextFactory.cs",
+              "DocumentMoniker": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\Models\\MyVaccineAppDbContextFactory.cs",
+              "RelativeDocumentMoniker": "MyVaccine.WebApi\\Models\\MyVaccineAppDbContextFactory.cs",
+              "ToolTip": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\Models\\MyVaccineAppDbContextFactory.cs",
+              "RelativeToolTip": "MyVaccine.WebApi\\Models\\MyVaccineAppDbContextFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T02:40:12.768Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\appsettings.json",
+              "RelativeDocumentMoniker": "MyVaccine.WebApi\\appsettings.json",
+              "ToolTip": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\appsettings.json",
+              "RelativeToolTip": "MyVaccine.WebApi\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-30T02:23:01.577Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "MyVaccine.WebApi\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\appsettings.Development.json",
+              "RelativeToolTip": "MyVaccine.WebApi\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAB6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-30T02:22:59.364Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MyVaccineAppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\Models\\MyVaccineAppDbContext.cs",
+              "RelativeDocumentMoniker": "MyVaccine.WebApi\\Models\\MyVaccineAppDbContext.cs",
+              "ToolTip": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\Models\\MyVaccineAppDbContext.cs",
+              "RelativeToolTip": "MyVaccine.WebApi\\Models\\MyVaccineAppDbContext.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T02:18:12.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\Program.cs",
+              "RelativeDocumentMoniker": "MyVaccine.WebApi\\Program.cs",
+              "ToolTip": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\Program.cs",
+              "RelativeToolTip": "MyVaccine.WebApi\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T02:08:43.257Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MyVaccine.WebApi",
+              "DocumentMoniker": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\MyVaccine.WebApi.csproj",
+              "RelativeDocumentMoniker": "MyVaccine.WebApi\\MyVaccine.WebApi.csproj",
+              "ToolTip": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\MyVaccine.WebApi.csproj",
+              "RelativeToolTip": "MyVaccine.WebApi\\MyVaccine.WebApi.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-30T02:11:19.67Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "MyVaccine.WebApi\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\Oscar\\Downloads\\Projects\\dotnet\\MyVaccineApp\\MyVaccineAppSln\\MyVaccine.WebApi\\Properties\\launchSettings.json",
+              "RelativeToolTip": "MyVaccine.WebApi\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-30T02:11:12.157Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\Oscar\\.nuget\\packages\\fluentvalidation\\11.9.0\\README.md",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\.nuget\\packages\\fluentvalidation\\11.9.0\\README.md",
+              "ToolTip": "C:\\Users\\Oscar\\.nuget\\packages\\fluentvalidation\\11.9.0\\README.md [Solo lectura]",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\.nuget\\packages\\fluentvalidation\\11.9.0\\README.md [Solo lectura]",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-11-30T02:11:05.687Z",
+              "EditorCaption": " [Solo lectura]"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
