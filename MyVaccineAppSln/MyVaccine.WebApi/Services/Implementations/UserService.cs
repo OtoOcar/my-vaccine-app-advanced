@@ -1,48 +1,66 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Azure.Core;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MyVaccine.WebApi.Dtos;
+using MyVaccine.WebApi.Dtos.Auth;
+using MyVaccine.WebApi.Dtos.User;
 using MyVaccine.WebApi.Literals;
 using MyVaccine.WebApi.Models;
 using MyVaccine.WebApi.Repositories.Contracts;
 using MyVaccine.WebApi.Services.Contracts;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace MyVaccine.WebApi.Services.Implementations;
 
-public class UserRepository : IUserRepository
+public class UserService : IUserService
 {
+    private readonly IMapper _mapper;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IUserRepository _userRepository;
-    public UserRepository(UserManager<IdentityUser> userManager, IUserRepository userRepository)
+
+    public UserService(IMapper mapper, UserManager<IdentityUser> userManager, IUserRepository userRepository)
     {
+        _mapper = mapper;
         _userManager = userManager;
         _userRepository = userRepository;
     }
-    public async Task<AuthResponseDto> AddUserAsync(RegisterRequetDto request)
+
+    public async Task<AuthResponseDto> Register(RegisterRequetDto request)
     {
-        var response = new AuthResponseDto();
-        try
+        var identityUser = new IdentityUser
         {
-            var result = await _userRepository.AddUser(request);
+            UserName = request.Username,
+            Email = request.Email   // <-- guardar email en AspNetUser
+        };
 
-            if (result != null)
+        var result = await _userManager.CreateAsync(identityUser, request.Password);
+
+        if (!result.Succeeded)
+        {
+            return new AuthResponseDto
             {
-                response.IsSuccess = result.Succeeded;
-                response.Errors = result?.Errors?.Select(x => x.Description).ToArray() ?? new string[] { };
-            }
+                IsSuccess = false,
+                Errors = result.Errors.Select(e => e.Description).ToArray()
 
+            };
         }
-        catch (Exception ex)
+
+        var user = new User
         {
-            response.IsSuccess = false;
-            response.Errors = new string[] { ex.Message };
-        }
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            AspNetUserId = identityUser.Id
+        };
 
-        return response;
+        await _userRepository.AddAsync(user);
+
+        return new AuthResponseDto
+        {
+            IsSuccess = true,
+            Message = "Usuario registrado correctamente"
+        };
     }
 
     public async Task<AuthResponseDto> Login(LoginRequestDto request)
@@ -134,11 +152,63 @@ public class UserRepository : IUserRepository
 
     }
 
-    public async Task<User> GetUserInfo(string email)
+    public async Task<UserDto?> GetUserInfo(string username)
     {
-        var user = await _userManager.FindByNameAsync(email);
+        // Busca por username
+        var identityUser = await _userManager.FindByNameAsync(username);
+        if (identityUser == null) return null;
 
-        var response = await _userRepository.FindByAsNoTracking(x => x.AspNetUserId == user.Id).FirstOrDefaultAsync();
-        return response;
+        var entity = await _userRepository
+            .FindByAsNoTracking(x => x.AspNetUserId == identityUser.Id)
+            .Include(x => x.Dependents)
+            .Include(u => u.Allergies)
+            .Include(u => u.FamilyGroups)
+            .FirstOrDefaultAsync();
+
+        if (entity == null) return null;
+
+        var dto = _mapper.Map<UserDto>(entity);
+        dto.Email = identityUser.Email; // Email directo desde Identity
+
+        return dto;
     }
+
+
+
+    public async Task<UserResponseDto?> Update(UserRequestDto request, int id)
+    {
+        var entity = await _userRepository
+            .FindBy(x => x.UserId == id)
+            .FirstOrDefaultAsync();
+
+        if (entity == null) return null;
+
+        // Actualiza los campos
+        entity.FirstName = request.FirstName;
+        entity.LastName = request.LastName;
+        //entity.Email = request.Email;
+
+        await _userRepository.Update(entity);
+
+        return _mapper.Map<UserResponseDto>(entity);
+    }
+
+
+    public async Task<IEnumerable<UserResponseDto>> GetAll()
+    {
+        var entities = await _userRepository.GetAllAsync();
+        return _mapper.Map<IEnumerable<UserResponseDto>>(entities);
+    }
+
+    public async Task<UserResponseDto?> Delete(int id)
+    {
+        var entity = await _userRepository.GetByIdAsync(id);
+        if (entity == null) return null;
+
+        await _userRepository.Delete(entity);
+        return _mapper.Map<UserResponseDto>(entity);
+    }
+
 }
+
+

@@ -8,11 +8,11 @@ using MyVaccine.WebApi.Services.Contracts;
 
 namespace MyVaccine.WebApi.Services.Implementations;
 
-public class BaseRepository : IBaseRepository
+public class DependentService : IDependentService
 {
     private readonly IBaseRepository<Dependent> _dependentRepository;
     private readonly IMapper _mapper;
-    public BaseRepository(IBaseRepository<Dependent> dependentRepository, IMapper mapper)
+    public DependentService(IBaseRepository<Dependent> dependentRepository, IMapper mapper)
     {
         _dependentRepository = dependentRepository;
         _mapper = mapper;
@@ -30,13 +30,18 @@ public class BaseRepository : IBaseRepository
         return response;
     }
 
-    public async Task<DependentResponseDto> Delete(int id)
+    public async Task<DependentResponseDto?> Delete(int id)
     {
-        var dependents = await _dependentRepository.FindBy(x => x.DependentId == id).FirstOrDefaultAsync();
+        var dependents = await _dependentRepository
+            .FindBy(x => x.DependentId == id)
+            .FirstOrDefaultAsync();
+
+        if (dependents == null)
+            return null; // no encontrado
 
         await _dependentRepository.Delete(dependents);
-        var response = _mapper.Map<DependentResponseDto>(dependents);
-        return response;
+
+        return _mapper.Map<DependentResponseDto>(dependents);
     }
 
     public async Task<IEnumerable<DependentResponseDto>> GetAll()

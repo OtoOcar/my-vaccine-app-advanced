@@ -1,9 +1,8 @@
-﻿sing System.Security.AccessControl;
-using FluentValidation;
-using Microsoft.AspNetCore.Http;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyVaccine.WebApi.Dtos;
 using MyVaccine.WebApi.Dtos.Dependent;
-using MyVaccine.WebApi.Models;
 using MyVaccine.WebApi.Services.Contracts;
 
 namespace MyVaccine.WebApi.Controllers;
@@ -35,6 +34,7 @@ public class DependentsController : ControllerBase
         return Ok(dependents);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create(DependentRequestDto dependentsDto)
     {
@@ -47,46 +47,36 @@ public class DependentsController : ControllerBase
         return Ok(dependents);
     }
 
-    
 
-    //    var dependent = _mapper.Map<Dependent>(dependentsDto);
-    //    await _dependentRepository.Add(dependent);
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateDependent(int id, [FromBody] DependentRequestDto request)
+    {
+        if (request == null || id <= 0)
+            return BadRequest(new { message = "Datos inválidos" });
 
-    //    return CreatedAtAction(nameof(GetById), new { id = dependent.Id }, dependent);
-    //}
+        var response = await _dependentService.Update(request, id);
 
-    //[HttpPut("{id}")]
-    //public async Task<IActionResult> Update(int id, DependentsDto dependentsDto)
-    //{
-    //    var validationResult = await _validator.ValidateAsync(dependentsDto);
-    //    if (!validationResult.IsValid)
-    //    {
-    //        return BadRequest(validationResult.Errors);
-    //    }
+        if (response == null)
+            return NotFound(new { message = "Dependiente no encontrado" });
 
-    //    var dependent = _dependentRepository.GetAll().FirstOrDefault(d => d.Id == id);
-    //    if (dependent == null)
-    //    {
-    //        return NotFound();
-    //    }
+        return Ok(response);
+    }
 
-    //    _mapper.Map(dependentsDto, dependent);
-    //    await _dependentRepository.Update(dependent);
 
-    //    return NoContent();
-    //}
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteDependent(int id)
+    {
+        if (id <= 0)
+            return BadRequest(new { message = "Id inválido" });
 
-    //[HttpDelete("{id}")]
-    //public async Task<IActionResult> Delete(int id)
-    //{
-    //    var dependent = _dependentRepository.GetAll().FirstOrDefault(d => d.Id == id);
-    //    if (dependent == null)
-    //    {
-    //        return NotFound();
-    //    }
+        var deleted = await _dependentService.Delete(id);
 
-    //    await _dependentRepository.Delete(dependent);
+        if (deleted == null)
+            return NotFound(new { message = "Dependiente no encontrado" });
 
-    //    return NoContent();
-    //}
+        return Ok(new { message = "Dependiente eliminado correctamente" });
+    }
+
 }

@@ -2,7 +2,7 @@
 
 namespace MyVaccine.WebApi.Services.Contracts;
 
-public interface IBaseRepository
+public interface IDependentService
 {
     Task<IEnumerable<DependentResponseDto>> GetAll();
     Task<DependentResponseDto> GetById(int id);

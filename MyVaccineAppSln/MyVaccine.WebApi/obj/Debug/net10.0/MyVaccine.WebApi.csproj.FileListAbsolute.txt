@@ -52,6 +52,7 @@ C:\Users\Oscar\Downloads\Projects\dotnet\MyVaccineApp\MyVaccineAppSln\MyVaccine.
 C:\Users\Oscar\Downloads\Projects\dotnet\MyVaccineApp\MyVaccineAppSln\MyVaccine.WebApi\bin\Debug\net10.0\MyVaccine.WebApi.runtimeconfig.json
 C:\Users\Oscar\Downloads\Projects\dotnet\MyVaccineApp\MyVaccineAppSln\MyVaccine.WebApi\bin\Debug\net10.0\MyVaccine.WebApi.dll
 C:\Users\Oscar\Downloads\Projects\dotnet\MyVaccineApp\MyVaccineAppSln\MyVaccine.WebApi\bin\Debug\net10.0\MyVaccine.WebApi.pdb
+C:\Users\Oscar\Downloads\Projects\dotnet\MyVaccineApp\MyVaccineAppSln\MyVaccine.WebApi\bin\Debug\net10.0\AutoMapper.dll
 C:\Users\Oscar\Downloads\Projects\dotnet\MyVaccineApp\MyVaccineAppSln\MyVaccine.WebApi\bin\Debug\net10.0\Azure.Core.dll
 C:\Users\Oscar\Downloads\Projects\dotnet\MyVaccineApp\MyVaccineAppSln\MyVaccine.WebApi\bin\Debug\net10.0\Azure.Identity.dll
 C:\Users\Oscar\Downloads\Projects\dotnet\MyVaccineApp\MyVaccineAppSln\MyVaccine.WebApi\bin\Debug\net10.0\FluentValidation.dll

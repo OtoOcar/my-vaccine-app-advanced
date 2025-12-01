@@ -1,12 +1,16 @@
-﻿using MyVaccine.WebApi.Dtos;
+﻿using Microsoft.AspNetCore.Identity;
+using MyVaccine.WebApi.Dtos.Auth;
 using MyVaccine.WebApi.Models;
+using System.Linq.Expressions;
 
-namespace MyVaccine.WebApi.Services.Contracts;
+namespace MyVaccine.WebApi.Repositories.Contracts;
 
-public interface IUserRepository
+public interface IUserRepository : IBaseRepository<User>
 {
-    Task<AuthResponseDto> AddUserAsync(RegisterRequetDto request);
-    Task<AuthResponseDto> Login(LoginRequestDto request);
-    Task<AuthResponseDto> RefreshToken(string email);
-    Task<User> GetUserInfo(string email);
+    Task AddAsync(User user);
+    IQueryable<User> FindByAsNoTracking(Expression<Func<User, bool>> predicate);
+    Task<IEnumerable<User>> GetAllAsync();
+    Task<IdentityResult> AddUser(RegisterRequetDto request);
+    Task Delete(User entity);
+    Task<User?> GetByIdAsync(int id);
 }

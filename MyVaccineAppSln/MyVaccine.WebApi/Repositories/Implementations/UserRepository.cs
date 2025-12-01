@@ -1,144 +1,71 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Azure.Core;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using MyVaccine.WebApi.Dtos;
-using MyVaccine.WebApi.Literals;
+using MyVaccine.WebApi.Dtos.Auth;
 using MyVaccine.WebApi.Models;
 using MyVaccine.WebApi.Repositories.Contracts;
-using MyVaccine.WebApi.Services.Contracts;
+using System.Transactions;
 
-namespace MyVaccine.WebApi.Services.Implementations;
+namespace MyVaccine.WebApi.Repositories.Implementations;
 
-public class UserRepository : IUserRepository
+public class UserRepository : BaseRepository<User>, IUserRepository
 {
+    private readonly MyVaccineAppDbContext _context;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IUserRepository _userRepository;
-    public UserRepository(UserManager<IdentityUser> userManager, IUserRepository userRepository)
+
+    public UserRepository(MyVaccineAppDbContext context, UserManager<IdentityUser> userManager) : base(context)
     {
+        _context = context;
         _userManager = userManager;
-        _userRepository = userRepository;
     }
-    public async Task<AuthResponseDto> AddUserAsync(RegisterRequetDto request)
+
+    // Implementación de AddAsync(User)
+    public async Task AddAsync(User user)
     {
-        var response = new AuthResponseDto();
-        try
-        {
-            var result = await _userRepository.AddUser(request);
-
-            if (result != null)
-            {
-                response.IsSuccess = result.Succeeded;
-                response.Errors = result?.Errors?.Select(x => x.Description).ToArray() ?? new string[] { };
-            }
-
-        }
-        catch (Exception ex)
-        {
-            response.IsSuccess = false;
-            response.Errors = new string[] { ex.Message };
-        }
-
-        return response;
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
     }
 
-    public async Task<AuthResponseDto> Login(LoginRequestDto request)
+    // Tu método especializado AddUser(RegisterRequetDto)
+    public async Task<IdentityResult> AddUser(RegisterRequetDto request)
     {
-        var response = new AuthResponseDto();
-        try
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        var identityUser = new ApplicationUser
         {
-            var user = await _userManager.FindByNameAsync(request.Username);
+            UserName = request.Username.ToLower(),
+            Email = request.Email
+        };
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, request.Password))
-            {
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Name, user.UserName)
-                };
+        var result = await _userManager.CreateAsync(identityUser, request.Password);
+        if (!result.Succeeded)
+            return result;
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(MyVaccineLiterals.JWT_KEY)));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(
-                    //issuer: _configuration["JwtIssuer"],
-                    //audience: _configuration["JwtAudience"],
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(15),
-                    signingCredentials: creds
-                );
-
-                var tokenresult = new JwtSecurityTokenHandler().WriteToken(token);
-                response.Token = tokenresult;
-                response.Expiration = token.ValidTo;
-                response.IsSuccess = true;
-            }
-            else
-            {
-                response.IsSuccess = false;
-            }
-        }
-        catch (Exception ex)
+        var newUser = new User
         {
-            response.IsSuccess = false;
-            response.Errors = new string[] { ex.Message };
-        }
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            AspNetUserId = identityUser.Id
+        };
 
-        return response;
+        await _context.Users.AddAsync(newUser);
+        await _context.SaveChangesAsync();
 
+        scope.Complete();
+        return result;
+        //return response;
     }
-    public async Task<AuthResponseDto> RefreshToken(string email)
+
+    public async Task<IEnumerable<User>> GetAllAsync()
     {
-        var response = new AuthResponseDto();
-        try
-        {
-            var user = await _userManager.FindByNameAsync(email);
-
-            if (user != null)
-            {
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Name, user.UserName)
-                };
-
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(MyVaccineLiterals.JWT_KEY)));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(
-                    //issuer: _configuration["JwtIssuer"],
-                    //audience: _configuration["JwtAudience"],
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(15),
-                    signingCredentials: creds
-                );
-
-                var tokenresult = new JwtSecurityTokenHandler().WriteToken(token);
-                response.Token = tokenresult;
-                response.Expiration = token.ValidTo;
-                response.IsSuccess = true;
-            }
-            else
-            {
-                response.IsSuccess = false;
-            }
-        }
-        catch (Exception ex)
-        {
-            response.IsSuccess = false;
-            response.Errors = new string[] { ex.Message };
-        }
-
-        return response;
-
+        return await _context.Users.ToListAsync();
     }
 
-    public async Task<User> GetUserInfo(string email)
+    public async Task<User?> GetByIdAsync(int id)
     {
-        var user = await _userManager.FindByNameAsync(email);
-
-        var response = await _userRepository.FindByAsNoTracking(x => x.AspNetUserId == user.Id).FirstOrDefaultAsync();
-        return response;
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.UserId == id);
     }
+
+
+
 }

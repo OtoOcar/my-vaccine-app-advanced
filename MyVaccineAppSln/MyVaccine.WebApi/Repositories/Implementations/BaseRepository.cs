@@ -1,67 +1,169 @@
-﻿using AutoMapper;
-using Azure.Core;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using MyVaccine.WebApi.Dtos.Dependent;
 using MyVaccine.WebApi.Models;
 using MyVaccine.WebApi.Repositories.Contracts;
-using MyVaccine.WebApi.Services.Contracts;
 
-namespace MyVaccine.WebApi.Services.Implementations;
+namespace MyVaccine.WebApi.Repositories.Implementations;
 
-public class BaseRepository : IBaseRepository
+public class BaseRepository<T> : IBaseRepository<T> where T : class, new()
 {
-    private readonly IBaseRepository<Dependent> _dependentRepository;
-    private readonly IMapper _mapper;
-    public BaseRepository(IBaseRepository<Dependent> dependentRepository, IMapper mapper)
+    private readonly MyVaccineAppDbContext _context;
+    public BaseRepository(MyVaccineAppDbContext context)
     {
-        _dependentRepository = dependentRepository;
-        _mapper = mapper;
+        _context = context;
     }
-    public async Task<DependentResponseDto> Add(DependentRequestDto request)
+    public async Task Add(T entity)
     {
-        // var dependents = await _dependentRepository.FindBy(x => x.DependentId == id).FirstOrDefaultAsync();
-        var dependents = new Dependent();
-        dependents.Name = request.Name;
-        dependents.DateOfBirth = request.DateOfBirth;
-        dependents.UserId = request.UserId;
+        var UpdatedAt = entity.GetType().GetProperty("UpdatedAt");
+        if (UpdatedAt != null) entity.GetType().GetProperty("UpdatedAt").SetValue(entity, DateTime.UtcNow);
 
-        await _dependentRepository.Add(dependents);
-        var response = _mapper.Map<DependentResponseDto>(dependents);
-        return response;
+        var CreatedAt = entity.GetType().GetProperty("CreatedAt");
+        if (CreatedAt != null) entity.GetType().GetProperty("CreatedAt").SetValue(entity, DateTime.UtcNow);
+
+        await _context.AddAsync(entity);
+        _context.Entry(entity).State = EntityState.Added;
+        await _context.SaveChangesAsync();
     }
 
-    public async Task<DependentResponseDto> Delete(int id)
+    public async Task AddRange(List<T> entity)
     {
-        var dependents = await _dependentRepository.FindBy(x => x.DependentId == id).FirstOrDefaultAsync();
+        entity = entity.Select(x =>
+        {
+            if (x.GetType().GetProperty("UpdatedAt") != null) x.GetType().GetProperty("UpdatedAt").SetValue(x, DateTime.UtcNow);
+            if (x.GetType().GetProperty("CreatedAt") != null) x.GetType().GetProperty("CreatedAt").SetValue(x, DateTime.UtcNow);
+            return x;
+        }).ToList();
 
-        await _dependentRepository.Delete(dependents);
-        var response = _mapper.Map<DependentResponseDto>(dependents);
-        return response;
+        _context.AddRange(entity);
+        await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<DependentResponseDto>> GetAll()
+    public async Task Delete(T entity)
     {
-        var dependents = await _dependentRepository.GetAll().AsNoTracking().ToListAsync();
-        var response = _mapper.Map<IEnumerable<DependentResponseDto>>(dependents);
-        return response;
+        _context.Remove(entity);
+        await _context.SaveChangesAsync();
     }
 
-    public async Task<DependentResponseDto> GetById(int id)
+    public async Task DeleteRange(List<T> entity)
     {
-        var dependents = await _dependentRepository.FindByAsNoTracking(x => x.DependentId == id).FirstOrDefaultAsync();
-        var response = _mapper.Map<DependentResponseDto>(dependents);
-        return response;
+        _context.RemoveRange(entity);
+        await _context.SaveChangesAsync();
     }
 
-    public async Task<DependentResponseDto> Update(DependentRequestDto request, int id)
+    public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
     {
-        var dependents = await _dependentRepository.FindBy(x => x.DependentId == id).FirstOrDefaultAsync();
-        dependents.Name = request.Name;
-        dependents.DateOfBirth = request.DateOfBirth;
-        dependents.UserId = request.UserId;
+        return GetAll().Where(predicate);
+    }
 
-        await _dependentRepository.Update(dependents);
-        var response = _mapper.Map<DependentResponseDto>(dependents);
-        return response;
+    public IQueryable<T> FindByAsNoTracking(Expression<Func<T, bool>> predicate)
+    {
+        return GetAll().AsNoTracking().Where(predicate);
+    }
+
+    public IQueryable<T> GetAll()
+    {
+        var entitySet = _context.Set<T>();
+        return entitySet.AsQueryable();
+    }
+
+    public async Task Patch(T entity)
+    {
+        var entry = _context.Entry(entity);
+
+        if (entry.State == EntityState.Detached)
+        {
+            // Assuming that the entity has an Id property
+            var key = entity.GetType().GetProperty("Id").GetValue(entity, null);
+            var originalEntity = await _context.Set<T>().FindAsync(key);
+
+            // Attach the original entity and set values from the incoming entity
+            entry = _context.Entry(originalEntity);
+            entry.CurrentValues.SetValues(entity);
+        }
+
+        // Update the UpdatedAt property if it exists
+        var updatedAtProperty = entity.GetType().GetProperty("UpdatedAt");
+        if (updatedAtProperty != null)
+        {
+            updatedAtProperty.SetValue(entity, DateTime.UtcNow);
+            entry.Property("UpdatedAt").IsModified = true;
+        }
+
+        // Get a list of properties that have been modified
+        var changedProperties = entry.Properties
+            .Where(p => p.IsModified)
+            .Select(p => p.Metadata.Name);
+
+        // Ensure that only the changed properties will be updated
+        foreach (var name in changedProperties)
+        {
+            entry.Property(name).IsModified = true;
+        }
+
+        // Save changes
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task PatchRange(List<T> entities)
+    {
+        foreach (var entity in entities)
+        {
+            var entry = _context.Entry(entity);
+
+            if (entry.State == EntityState.Detached)
+            {
+                // Assuming that the entity has an Id property
+                var key = entity.GetType().GetProperty("Id").GetValue(entity, null);
+                var originalEntity = await _context.Set<T>().FindAsync(key);
+
+                // Attach the original entity and set values from the incoming entity
+                entry = _context.Entry(originalEntity);
+                entry.CurrentValues.SetValues(entity);
+            }
+
+            // Update the UpdatedAt property if it exists
+            var updatedAtProperty = entity.GetType().GetProperty("UpdatedAt");
+            if (updatedAtProperty != null)
+            {
+                updatedAtProperty.SetValue(entity, DateTime.UtcNow);
+                entry.Property("UpdatedAt").IsModified = true;
+            }
+
+            // Get a list of properties that have been modified
+            var changedProperties = entry.Properties
+                .Where(p => p.IsModified)
+                .Select(p => p.Metadata.Name);
+
+            // Ensure that only the changed properties will be updated
+            foreach (var name in changedProperties)
+            {
+                entry.Property(name).IsModified = true;
+            }
+        }
+
+        // Save changes
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task Update(T entity)
+    {
+        var UpdatedAt = entity.GetType().GetProperty("UpdatedAt");
+        if (UpdatedAt != null) entity.GetType().GetProperty("UpdatedAt").SetValue(entity, DateTime.UtcNow);
+        //DatabaseContext.Entry(entity).State = EntityState.Modified;
+
+        _context.Update(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateRange(List<T> entity)
+    {
+        entity = entity.Select(x =>
+        {
+            if (x.GetType().GetProperty("UpdatedAt") != null) x.GetType().GetProperty("UpdatedAt").SetValue(x, DateTime.UtcNow);
+            return x;
+        }).ToList();
+
+        _context.UpdateRange(entity);
+        await _context.SaveChangesAsync();
     }
 }
